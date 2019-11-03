@@ -5,7 +5,7 @@ from datetime import datetime
 def create_topics_json(topic_list):
 
     topics_json = {}
-    topics_json["versio"] = 1
+    topics_json["version"] = 1
     topics_json["topics"] = []
 
     for topic in topic_list:
@@ -30,5 +30,5 @@ def remove_file(file_name):
     os.unlink(file_name)
 
 if __name__ == "__main__":
-    f = write_to_file("topics", create_topics_json(["test-1", "test-2"]))
+    f = write_to_file("topics", create_topics_json(["topic-1", "topic-2"]))
     print (f)

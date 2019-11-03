@@ -14,11 +14,11 @@ def list_topics(zookeeper="127.0.0.1", kafka_path="/opt/kafka/bin"):
 	proc_exit_code = proc.returncode
 
 	if proc_exit_code != 0:
-		return False, errors, proc_exit_code
+		return errors, None
 
 	output_list = output.split("\n")[0:-1]
 
-	return output_list
+	return None, output_list
 
 def topic_filter(topic_list, regex=".*"):
 	
