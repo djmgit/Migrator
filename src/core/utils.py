@@ -52,7 +52,7 @@ def json_2_csv(json_data):
 def csv_2_json(csv_data):
 
     csv_list = csv_data.split("\n")
-    csv_list = csv_data[1:len(csv_list) - 1]
+    csv_list = csv_list[1:len(csv_list)]
 
     json_data = {}
 
@@ -62,6 +62,8 @@ def csv_2_json(csv_data):
     for csv_row in csv_list:
         csv_row_list = csv_row.split()
         csv_row_list = [i.strip() for i in csv_row_list]
+        if len(csv_row_list) == 0:
+            continue
 
         topic = csv_row_list[0]
         partition_num = csv_row_list[1]
@@ -90,9 +92,9 @@ if __name__ == "__main__":
     #f = write_to_file("topics", create_topics_json(["topic-1", "topic-2"]))
     #print (f)
 
-    with open("plan-1573402967.json") as f:
-        json_data = json.load(f)
+    with open("t.csv") as f:
+        csv_data = f.read()
 
-    out = json_2_csv(json_data)
+    out = csv_2_json(csv_data)
 
-    print (out)
+    print (json.dumps(out, indent=2))
