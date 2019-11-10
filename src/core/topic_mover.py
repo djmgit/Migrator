@@ -38,13 +38,10 @@ def generate_plan(**kwargs):
 	if proc_exit_code != 0:
 		return error, None
 
-	print (output)
-
 	output_list = output.split("\n")
 	plan_json = json.loads(output_list[4])
 
 	remove_file(topic_json_file)
-	print (json.dumps(plan_json, indent=2))
 
 	return None, plan_json
 

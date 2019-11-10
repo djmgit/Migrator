@@ -1,6 +1,7 @@
 from src.core.topic_mover import generate_plan, execute_plan
-from src.core.utils import json_2_csv, csv_2_json
+from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv
 import optparse
+import editor
 import sys
 
 def drive():
@@ -12,8 +13,7 @@ def drive():
 	else:
 		kafka_path = input("kafka path : ")
 
-	if options.all:
-		is_all = options.all
+	is_all = options.all
 
 	if options.topics:
 		topics = [t.strip() for t in options.topics.split(",")]
@@ -37,8 +37,9 @@ def drive():
 
 	brokers = [b.strip() for b in brokers.split(",")]
 
-	if options.topics == None and options.all == None:
+	if options.topics == None and options.all == False:
 		topics = input("Topics to move (separated by comma) : ")
+		topics = [t.strip() for t in topics.split(",")]
 
 	error, plan_json = generate_plan(
 										zookeeper=zookeeper,
@@ -50,7 +51,10 @@ def drive():
 									)
 
 	plan_csv = json_2_csv(plan_json)
-	print (plan_csv)
+
+	plan_csv = editor.edit(contents=plan_csv)
+
+	write_to_file_csv(plan_csv)
 
 def setup_optparse():
 	parser = optparse.OptionParser()

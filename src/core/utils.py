@@ -19,12 +19,22 @@ def write_to_file(json_type="topics", json_data=None):
 
     unix_time_stamp = datetime.now().strftime("%s")
 
-    file_name = "{json_type}-{unix_time_stamp}.json".format(json_type=json_type, unix_time_stamp=unix_time_stamp)
+    file_name = ".{json_type}.json".format(json_type=json_type)
 
     with open(file_name, "w") as openfile:
         openfile.write(json.dumps(json_data, indent=2))
 
     return file_name
+
+def write_to_file_csv(csv_data):
+
+    unix_time_stamp = datetime.now().strftime("%s")
+
+    file_name = ".plan.csv"
+
+    with open(file_name, "w") as openfile:
+        openfile.write(csv_data.decode())
+
 
 def json_2_csv(json_data):
     partition_data = json_data.get("partitions")
