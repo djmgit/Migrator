@@ -10,10 +10,10 @@ EXECUTE_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --execute -
 def generate_plan(**kwargs):
 
 	zookeeper = kwargs.get("zookeeper")
-	all_topics = kwargs.get("all")
+	all_topics = kwargs.get("all_topics")
 	topics = kwargs.get("topics")
 	kafka_path = kwargs.get("kafka_path")
-	topic_filter = kwargs.get("filter")
+	topic_filter = kwargs.get("topic_filter")
 	brokers = kwargs.get("brokers")
 
 	if all_topics == True or topic_filter:
