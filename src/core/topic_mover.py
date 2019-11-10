@@ -71,7 +71,7 @@ def execute_plan(**kwargs):
 if __name__ == "__main__":
 	plan_json = generate_plan(
 		zookeeper="127.0.0.1",
-		all=True,
+		topics=["test-1"],
 		kafka_path="/opt/kafka/bin",
 		brokers=["1", "2", "3"]
 	)[1]

@@ -26,9 +26,73 @@ def write_to_file(json_type="topics", json_data=None):
 
     return file_name
 
+def json_2_csv(json_data):
+    partition_data = json_data.get("partitions")
+
+    headers = ["Topic", "Partition", "Replicas", "Log Dirs"]
+
+    rows = []
+    rows.append(headers)
+
+    for partition in partition_data:
+        topic = partition.get("topic")
+        partition_num = str(partition.get("partition"))
+        replicas = ",".join([str(i) for i in partition.get("replicas")])
+        log_dirs = ",".join([str(i) for i in partition.get("log_dirs")])
+
+        rows.append([topic, partition_num, replicas, log_dirs])
+
+    csv_data = ""
+
+    for row in rows:
+        csv_data += "        ".join(row) + "\n"
+
+    return csv_data
+
+def csv_2_json(csv_data):
+
+    csv_list = csv_data.split("\n")
+    csv_list = csv_data[1:len(csv_list) - 1]
+
+    json_data = {}
+
+    json_data["version"] = 1
+    json_data["partitions"] = []
+
+    for csv_row in csv_list:
+        csv_row_list = csv_row.split()
+        csv_row_list = [i.strip() for i in csv_row_list]
+
+        topic = csv_row_list[0]
+        partition_num = csv_row_list[1]
+
+        replicas = csv_row_list[2].split(",")
+        replicas = [int(i.strip()) for i in replicas]
+
+        log_dirs = csv_row_list[3].split(",")
+        log_dirs = [i.strip() for i in log_dirs]
+
+        partition = {
+            "topic": topic,
+            "partition": partition_num,
+            "replicas": replicas,
+            "log_dirs": log_dirs
+        }
+
+        json_data["partitions"].append(partition)
+
+    return json_data
+
 def remove_file(file_name):
     os.unlink(file_name)
 
 if __name__ == "__main__":
-    f = write_to_file("topics", create_topics_json(["topic-1", "topic-2"]))
-    print (f)
+    #f = write_to_file("topics", create_topics_json(["topic-1", "topic-2"]))
+    #print (f)
+
+    with open("plan-1573402967.json") as f:
+        json_data = json.load(f)
+
+    out = json_2_csv(json_data)
+
+    print (out)
