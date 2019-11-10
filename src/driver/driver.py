@@ -8,6 +8,10 @@ def drive():
 
 	options = setup_optparse()
 
+	if options.edit:
+		edit_plan()
+		exit(0)
+
 	if options.kafkapath:
 		kafka_path = options.kafkapath
 	else:
@@ -56,6 +60,14 @@ def drive():
 
 	write_to_file_csv(plan_csv)
 
+def edit_plan():
+	with open(".plan.csv") as openfile:
+		csv_plan = openfile.read()
+
+	plan_csv = editor.edit(contents=csv_plan)
+
+	write_to_file_csv(plan_csv)
+
 def setup_optparse():
 	parser = optparse.OptionParser()
 	parser.add_option('-p', '--kafkapath', dest='kafkapath', default="/opt/kafka/bin", help="Provide path to kafka binaries")
@@ -64,6 +76,7 @@ def setup_optparse():
 	parser.add_option('-t', '--topics', dest='topics', help="Comma separated topics")
 	parser.add_option('-z', '--zookeeper', dest='zookeeper', help="Provide zookeeper host/ip. If port used is different from 2181, then provide host:port")
 	parser.add_option('-b', '--brokers', dest="brokers", help="Provide broker ids separated by comma")
+	parser.add_option('-e', '--edit', dest="edit", action="store_true", default=False, help="Edit current plan" )
 
 	options, args = parser.parse_args()
 
