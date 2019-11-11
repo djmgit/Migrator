@@ -13,6 +13,10 @@ def drive():
 		edit_plan()
 		exit(0)
 
+	if options.deploy:
+		deploy()
+		exit(0)
+
 	if options.kafkapath:
 		kafka_path = options.kafkapath
 	else:
@@ -62,7 +66,7 @@ def drive():
 	write_to_file_csv(plan_csv)
 
 def edit_plan():
-	if not os.path.isfile(".plan.csv"):
+	if not os.path.isfile(os.path.expanduser("~/.plan.csv")):
 		print ("No ressasignment in progress!")
 		exit(0)
 
@@ -73,6 +77,12 @@ def edit_plan():
 
 	write_to_file_csv(plan_csv)
 
+def deploy():
+	if not os.path.isfile(os.path.expanduser("~/.plan.csv")):
+		print ("No ressasignment in progress!")
+		exit(0)
+	pass
+
 def setup_optparse():
 	parser = optparse.OptionParser()
 	parser.add_option('-p', '--kafkapath', dest='kafkapath', default="/opt/kafka/bin", help="Provide path to kafka binaries")
@@ -82,6 +92,7 @@ def setup_optparse():
 	parser.add_option('-z', '--zookeeper', dest='zookeeper', help="Provide zookeeper host/ip. If port used is different from 2181, then provide host:port")
 	parser.add_option('-b', '--brokers', dest="brokers", help="Provide broker ids separated by comma")
 	parser.add_option('-e', '--edit', dest="edit", action="store_true", default=False, help="Edit current plan" )
+	parser.add_option('-d', '--deploy', dest="deploy", action="store_true", default=False, help="Deploy the plan" )
 
 	options, args = parser.parse_args()
 

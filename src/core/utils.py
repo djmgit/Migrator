@@ -19,7 +19,7 @@ def write_to_file(json_type="topics", json_data=None):
 
     unix_time_stamp = datetime.now().strftime("%s")
 
-    file_name = ".{json_type}.json".format(json_type=json_type)
+    file_name = os.path.expanduser("~/.{json_type}.json").format(json_type=json_type)
 
     with open(file_name, "w") as openfile:
         openfile.write(json.dumps(json_data, indent=2))
@@ -30,7 +30,7 @@ def write_to_file_csv(csv_data):
 
     unix_time_stamp = datetime.now().strftime("%s")
 
-    file_name = ".plan.csv"
+    file_name = os.path.expanduser("~/.plan.csv")
 
     with open(file_name, "w") as openfile:
         openfile.write(csv_data.decode())
