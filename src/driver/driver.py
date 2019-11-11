@@ -3,6 +3,7 @@ from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv
 import optparse
 import editor
 import sys
+import os
 
 def drive():
 
@@ -61,6 +62,10 @@ def drive():
 	write_to_file_csv(plan_csv)
 
 def edit_plan():
+	if not os.path.isfile(".plan.csv"):
+		print ("No ressasignment in progress!")
+		exit(0)
+
 	with open(".plan.csv") as openfile:
 		csv_plan = openfile.read()
 
