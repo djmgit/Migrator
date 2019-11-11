@@ -14,7 +14,7 @@ def drive():
 		exit(0)
 
 	if options.deploy:
-		deploy()
+		deploy(options)
 		exit(0)
 
 	if options.kafkapath:
@@ -59,6 +59,10 @@ def drive():
 										brokers=brokers
 									)
 
+	if error:
+		print ("Reassignment plan generation failed with error : {}".format(str(error)))
+		exit(2)
+
 	plan_csv = json_2_csv(plan_json)
 
 	plan_csv = editor.edit(contents=plan_csv)
@@ -70,18 +74,40 @@ def edit_plan():
 		print ("No ressasignment in progress!")
 		exit(0)
 
-	with open(".plan.csv") as openfile:
+	with open(os.path.expanduser("~/.plan.csv")) as openfile:
 		csv_plan = openfile.read()
 
 	plan_csv = editor.edit(contents=csv_plan)
 
 	write_to_file_csv(plan_csv)
 
-def deploy():
+def deploy(options):
 	if not os.path.isfile(os.path.expanduser("~/.plan.csv")):
 		print ("No ressasignment in progress!")
 		exit(0)
+
+	if options.zookeeper:
+		zookeeper = options.zookeeper
+	else:
+		zookeeper = input("Zookeeper : ")
 	pass
+
+	if options.kafkapath:
+		kafka_path = options.kafkapath
+	else:
+		kafka_path = input("kafka path : ")
+
+	with open(os.path.expanduser("~/.plan.csv")) as plan:
+		csv_data = plan.read()
+
+	plan_json = csv_2_json(csv_data)
+
+	error, plan_json_file = execute_plan(zookeeper=zookeeper, plan_json=plan_json, kafka_path=kafka_path)
+
+	if error:
+		print ("Reassignment plan execution failed with error : {}".format(str(error)))
+		exit(2)
+
 
 def setup_optparse():
 	parser = optparse.OptionParser()

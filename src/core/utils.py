@@ -76,7 +76,7 @@ def csv_2_json(csv_data):
             continue
 
         topic = csv_row_list[0]
-        partition_num = csv_row_list[1]
+        partition_num = int(csv_row_list[1])
 
         replicas = csv_row_list[2].split(",")
         replicas = [int(i.strip()) for i in replicas]
