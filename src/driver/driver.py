@@ -1,4 +1,4 @@
-from src.core.topic_mover import generate_plan, execute_plan
+from src.core.topic_mover import generate_plan, execute_plan, verify_plan
 from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv
 import optparse
 import editor
@@ -15,6 +15,10 @@ def drive():
 
 	if options.deploy:
 		deploy(options)
+		exit(0)
+
+	if options.verify:
+		verify(options)
 		exit(0)
 
 	if options.kafkapath:
@@ -108,6 +112,31 @@ def deploy(options):
 		print ("Reassignment plan execution failed with error : {}".format(str(error)))
 		exit(2)
 
+def verify(options):
+	if not os.path.isfile(os.path.expanduser("~/.plan.json")):
+		print ("No ressasignment plan present!")
+		exit(0)
+
+	plan_json_file = os.path.expanduser("~/.plan.json")
+
+	if options.zookeeper:
+		zookeeper = options.zookeeper
+	else:
+		zookeeper = input("Zookeeper : ")
+	pass
+
+	if options.kafkapath:
+		kafka_path = options.kafkapath
+	else:
+		kafka_path = input("kafka path : ")
+
+	error, status = verify_plan(zookeeper=zookeeper, kafka_path=kafka_path, plan_json_file=plan_json_file)
+
+	if error:
+		print ("Reassignment plan verification failed with error : {}".format(str(error)))
+		exit(2)
+
+	print (status)
 
 def setup_optparse():
 	parser = optparse.OptionParser()
@@ -119,6 +148,7 @@ def setup_optparse():
 	parser.add_option('-b', '--brokers', dest="brokers", help="Provide broker ids separated by comma")
 	parser.add_option('-e', '--edit', dest="edit", action="store_true", default=False, help="Edit current plan" )
 	parser.add_option('-d', '--deploy', dest="deploy", action="store_true", default=False, help="Deploy the plan" )
+	parser.add_option('-v', '--verify', dest="verify", action="store_true", default=False, help="Verify execution" )
 
 	options, args = parser.parse_args()
 

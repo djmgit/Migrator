@@ -6,6 +6,7 @@ from src.core.utils import create_topics_json, write_to_file, remove_file
 
 GENERATE_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --generate --topics-to-move-json-file {topics_json} --broker-list {broker_list}"
 EXECUTE_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --execute --reassignment-json-file {plan_json}"
+VERIFY_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --verify --reassignment-json-file {plan_json}"
 
 def generate_plan(**kwargs):
 
@@ -63,6 +64,23 @@ def execute_plan(**kwargs):
 		return error, None
 
 	return None, plan_json_file
+
+def verify_plan(**kwargs):
+	zookeeper = kwargs.get("zookeeper")
+	plan_json_file = kwargs.get("plan_json_file")
+	kafka_path = kwargs.get("kafka_path")
+
+	plan_verification_command = VERIFY_PLAN.format(zookeeper=zookeeper, plan_json=plan_json_file)
+	plan_verification_command = os.path.join(kafka_path, plan_verification_command)
+
+	proc = subprocess.Popen(plan_verification_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+	output, error = proc.communicate()
+	proc_exit_code = proc.returncode
+
+	if proc_exit_code != 0:
+		return error, None
+
+	return None, output
 	
 
 if __name__ == "__main__":
