@@ -18,6 +18,8 @@ def generate_plan(**kwargs):
 	brokers = kwargs.get("brokers")
 
 	if all_topics == True or topic_filter_regex:
+		print (all_topics)
+		print (topic_filter)
 		error, topics = list_topics(zookeeper=zookeeper, kafka_path=kafka_path)
 
 		if error:

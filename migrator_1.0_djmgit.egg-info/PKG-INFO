@@ -1,0 +1,15 @@
+Metadata-Version: 1.1
+Name: migrator-1.0-djmgit
+Version: 1.0
+Summary: A tool for flexible reassignment of kafka topic partitions
+Home-page: https://github.com/djmgit/Migrator
+Author: Deepjyoti Mondal
+Author-email: djmdeveloper060796@gmail.com
+License: GPL
+Description: A tool for flexible reassignment of kafka topic partitions
+Keywords: kafka automation devops systems
+Platform: UNKNOWN
+Classifier: Development Status :: 1.0
+Classifier: License :: GPL
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Automation :: Systems :: Devops
