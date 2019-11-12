@@ -5,7 +5,7 @@ import editor
 import sys
 import os
 import json
-import tabulate
+from tabulate import tabulate
 
 def drive():
 
@@ -108,6 +108,7 @@ def deploy(options):
 		exit(0)
 
 	print ("Using the following Plan")
+	print ("\n")
 	show_plan(frmt="csv")
 	print ("\n")
 	show_plan(frmt="json")
@@ -170,16 +171,36 @@ def show_plan(frmt="csv"):
 		print ("No plan present")
 		return
 
+	print ("\n")
 	with open(plan_csv) as f:
 		data_csv = f.read()
 
 	if frmt == "csv":
-		print (data_csv)
+		print (show_table(data_csv))
+		print ("\n")
 		return
 
 	data_json = csv_2_json(data_csv)
 
 	print (json.dumps(data_json, indent=2))
+
+	print ("\n")
+
+def show_table(plan_csv):
+	rows_temp = plan_csv.split("\n")
+	rows = []
+
+	for row in rows_temp:
+		if len(row) != 0:
+			rows.append(row)
+
+	headers = rows[0].split()
+	body =  []
+
+	for row in rows[1:]:
+		body.append(row.split())
+
+	return tabulate(body, headers, tablefmt="grid")
 
 def setup_optparse():
 	parser = optparse.OptionParser()
