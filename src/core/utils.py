@@ -113,6 +113,16 @@ def read_from_topics_file(topics_file):
 
     return topic_list
 
+def clean_reassignment():
+    plan_json = os.path.expanduser("~/.plan.json")
+    plan_csv = os.path.expanduser("~/.plan.csv")
+
+    if os.path.isfile(plan_csv):
+        os.unlink(plan_csv)
+
+    if os.path.isfile(plan_json):
+        os.unlink(plan_json)
+
 if __name__ == "__main__":
     #f = write_to_file("topics", create_topics_json(["topic-1", "topic-2"]))
     #print (f)

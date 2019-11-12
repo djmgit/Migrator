@@ -1,9 +1,11 @@
 from src.core.topic_mover import generate_plan, execute_plan, verify_plan
-from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv, read_from_topics_file
+from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv, read_from_topics_file, clean_reassignment
 import optparse
 import editor
 import sys
 import os
+import json
+import tabulate
 
 def drive():
 
@@ -11,6 +13,19 @@ def drive():
 
 	if options.edit:
 		edit_plan()
+		exit(0)
+
+	if options.list_partitions:
+		show_plan(frmt="csv")
+		exit(0)
+
+	if options.list_partitions_json:
+		show_plan(frmt="json")
+		exit(0)
+
+	if options.clean:
+		clean_reassignment()
+		print ("Existing reassignment data cleaned")
 		exit(0)
 
 	if options.deploy:
@@ -53,7 +68,6 @@ def drive():
 	brokers = [b.strip() for b in brokers.split(",")]
 
 	if topics == None and options.all == False:
-		print ("ssd")
 		topics = input("Topics to move (separated by comma) : ")
 		topics = [t.strip() for t in topics.split(",")]
 
@@ -93,6 +107,11 @@ def deploy(options):
 		print ("No ressasignment in progress!")
 		exit(0)
 
+	print ("Using the following Plan")
+	show_plan(frmt="csv")
+	print ("\n")
+	show_plan(frmt="json")
+
 	if options.zookeeper:
 		zookeeper = options.zookeeper
 	else:
@@ -114,6 +133,9 @@ def deploy(options):
 	if error:
 		print ("Reassignment plan execution failed with error : {}".format(str(error)))
 		exit(2)
+
+	print ("Plan executed successfully!")
+	print ("Please execute migrator -v to verify reassignment")
 
 def verify(options):
 	if not os.path.isfile(os.path.expanduser("~/.plan.json")):
@@ -141,6 +163,24 @@ def verify(options):
 
 	print (status)
 
+def show_plan(frmt="csv"):
+	plan_csv = os.path.expanduser("~/.plan.csv")
+
+	if not os.path.isfile(plan_csv):
+		print ("No plan present")
+		return
+
+	with open(plan_csv) as f:
+		data_csv = f.read()
+
+	if frmt == "csv":
+		print (data_csv)
+		return
+
+	data_json = csv_2_json(data_csv)
+
+	print (json.dumps(data_json, indent=2))
+
 def setup_optparse():
 	parser = optparse.OptionParser()
 	parser.add_option('-p', '--kafkapath', dest='kafkapath', default="/opt/kafka/bin", help="Provide path to kafka binaries")
@@ -153,6 +193,9 @@ def setup_optparse():
 	parser.add_option('-e', '--edit', dest="edit", action="store_true", default=False, help="Edit current plan" )
 	parser.add_option('-d', '--deploy', dest="deploy", action="store_true", default=False, help="Deploy the plan" )
 	parser.add_option('-v', '--verify', dest="verify", action="store_true", default=False, help="Verify execution" )
+	parser.add_option('-c', '--clean', dest="clean", action="store_true", default=False, help="Clean any reassignmnet data")
+	parser.add_option('-l', '--list', dest="list_partitions", action="store_true", default=False, help="List partition reassignments")
+	parser.add_option('-j', '--list-json', dest="list_partitions_json", action="store_true", default=False, help="List partition reassignments in json format")
 
 	options, args = parser.parse_args()
 
