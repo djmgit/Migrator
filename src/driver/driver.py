@@ -1,5 +1,5 @@
 from src.core.topic_mover import generate_plan, execute_plan, verify_plan
-from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv
+from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv, read_from_topics_file
 import optparse
 import editor
 import sys
@@ -30,6 +30,8 @@ def drive():
 
 	if options.topics:
 		topics = [t.strip() for t in options.topics.split(",")]
+	elif options.topics_file:
+		topics = read_from_topics_file(options.topics_file)
 	else:
 		topics = None
 
@@ -50,7 +52,8 @@ def drive():
 
 	brokers = [b.strip() for b in brokers.split(",")]
 
-	if options.topics == None and options.all == False:
+	if topics == None and options.all == False:
+		print ("ssd")
 		topics = input("Topics to move (separated by comma) : ")
 		topics = [t.strip() for t in topics.split(",")]
 
@@ -144,6 +147,7 @@ def setup_optparse():
 	parser.add_option('-a', '--all', dest="all", action="store_true", default=False, help="Select all the topics for moving")
 	parser.add_option('-f', '--filter', dest="filter", help="Regex to filter topic names")
 	parser.add_option('-t', '--topics', dest='topics', help="Comma separated topics")
+	parser.add_option('-k', '--topics-file', dest="topics_file", help="File containing list of topics to move")
 	parser.add_option('-z', '--zookeeper', dest='zookeeper', help="Provide zookeeper host/ip. If port used is different from 2181, then provide host:port")
 	parser.add_option('-b', '--brokers', dest="brokers", help="Provide broker ids separated by comma")
 	parser.add_option('-e', '--edit', dest="edit", action="store_true", default=False, help="Edit current plan" )

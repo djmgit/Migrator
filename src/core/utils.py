@@ -98,6 +98,21 @@ def csv_2_json(csv_data):
 def remove_file(file_name):
     os.unlink(file_name)
 
+def read_from_topics_file(topics_file):
+    with open(topics_file) as f:
+        topics = f.readlines()
+
+    topic_list = []
+
+    for topic in topics:
+        topic = topic.strip()
+        if topic == "" or len(topic) == 0:
+            continue
+
+        topic_list.append(topic)
+
+    return topic_list
+
 if __name__ == "__main__":
     #f = write_to_file("topics", create_topics_json(["topic-1", "topic-2"]))
     #print (f)

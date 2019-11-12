@@ -14,7 +14,7 @@ def generate_plan(**kwargs):
 	all_topics = kwargs.get("all_topics")
 	topics = kwargs.get("topics")
 	kafka_path = kwargs.get("kafka_path")
-	topic_filter = kwargs.get("topic_filter")
+	topic_filter_regex = kwargs.get("topic_filter")
 	brokers = kwargs.get("brokers")
 
 	if all_topics == True or topic_filter:
@@ -23,8 +23,8 @@ def generate_plan(**kwargs):
 		if error:
 			return error, None
 
-	if topic_filter:
-		topics = topic_filter(topics, regex=topic_filter)
+	if topic_filter_regex:
+		topics = topic_filter(topics, regex=topic_filter_regex)
 
 	topics_json = create_topics_json(topics)
 	topic_json_file = write_to_file(json_type="topics", json_data=topics_json)
