@@ -14,3 +14,14 @@ and crisp commands.
 - If at any step you forget to provide a vital parameter, migrator itself will ask for it. So no issues even if you
   forget a parameter. No need to go back and search the kafka doc or lookup your history and copy that huge command.
 
+## Installing Migrator
+
+- Clone this repo on your machine (or remote server)
+- Change your working directory to this repository.
+- Execute : ```sudo python3 setup.py install```
+- Verify your installation using ```migrator --help```
+
+The machine where where you will install Migrator should have the kafka binaries installed on them.
+By default Migrator looks for kafka binaries under /opt/kafka/bin. If your binaries are located elsewhere, you
+can pass it to Migrator using the --kakfapath option. Dont worry even if you forget to pass the path, Migrator
+will automatically ask for it.
