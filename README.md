@@ -2,7 +2,7 @@
 
 Migrator is a CLI based tool for easy and flexible migration of kafka topic partions to given set of brokers
 Migrator can used to easily move topic partions without using those long kakfa commands. Also it displays reassignment
-data in simple and easy to understand/edit table format. It replaces those largy kafka-cli commands with short
+data in simple and easy to understand/edit table format. It replaces those large kafka-cli commands with short
 and crisp commands.
 
 ### Features provided by Migrator
@@ -225,5 +225,7 @@ Reassignment of partition topic-1-1 completed successfully
  
  - You can provide multiple topics for reassignment : ``` migrator -z 127.0.0.1 -t topic-1,topic-2,topic-3,topic-n -b 1,2,3,4```
  - You can provide the topics as a file : ``` migrator -z 127.0.0.1 -k <topics_file> -b 1,2,3,4``` Each line in the topics file shoud be a separate topic.
- - You can generate a plan for all the topics in the cluster using the **-a** option
+ - You can generate a plan for all the topics in the cluster using the **-a** option : ``` migrator -z 127.0.0.1 -a -b 1,2,3,4```
+ - Optinally you can apply filters. For example you can only reassign those topics which start with the pattern "topic". You can use regex to do this. ``` migrator -z 127.0.0.1 -a -b 1,2,3,4 -f "^topic"```
+ 
 
