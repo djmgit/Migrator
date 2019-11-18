@@ -150,5 +150,80 @@ migrator -e
  
  It should be noted here that, migrator allows only one reassignment to be done at a time. If you try to generate another
  reassignment plan at this moment, your previous plan's data will be replaced with the new one.
+ 
+ Finally you can execute your assignment with the following:
+ 
+ ```
+  migrator -d
+Using the following Plan
 
+
+
+
++---------+-------------+------------+---------+
+| Topic   |   Partition | Replicas   | Log     |
++=========+=============+============+=========+
+| topic-1 |           0 | 3,4        | any,any |
++---------+-------------+------------+---------+
+| topic-1 |           1 | 4,3        | any,any |
++---------+-------------+------------+---------+
+
+
+
+
+
+
+{
+  "version": 1,
+  "partitions": [
+    {
+      "topic": "topic-1",
+      "partition": 0,
+      "replicas": [
+        3,
+        4
+      ],
+      "log_dirs": [
+        "any",
+        "any"
+      ]
+    },
+    {
+      "topic": "topic-1",
+      "partition": 1,
+      "replicas": [
+        4,
+        3
+      ],
+      "log_dirs": [
+        "any",
+        "any"
+      ]
+    }
+  ]
+}
+
+
+Zookeeper : 127.0.0.1
+Plan executed successfully!
+Please execute migrator -v to verify reassignment
+ ```
+ 
+ As the output suggests, you should always verify your reassignment:
+ 
+ ```
+ migrator -v -z 127.0.0.1
+Status of partition reassignment: 
+Reassignment of partition topic-1-0 completed successfully
+Reassignment of partition topic-1-1 completed successfully
+
+ ```
+ 
+ Thats it! You have successfully migrated your topic!!
+ 
+ Here are some of the other options you can use:
+ 
+ - You can provide multiple topics for reassignment : ``` migrator -z 127.0.0.1 -t topic-1,topic-2,topic-3,topic-n -b 1,2,3,4```
+ - You can provide the topics as a file : ``` migrator -z 127.0.0.1 -k <topics_file> -b 1,2,3,4``` Each line in the topics file shoud be a separate topic.
+ - You can generate a plan for all the topics in the cluster using the **-a** option
 
