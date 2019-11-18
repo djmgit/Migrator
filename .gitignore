@@ -1,1 +1,4 @@
 kafkasetup.sh
+migrator_1.0_djmgit.egg-info
+build
+dist

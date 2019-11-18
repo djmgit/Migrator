@@ -1,3 +1,0 @@
-[console_scripts]
-migrator = src.driver.driver:drive
-

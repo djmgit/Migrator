@@ -1,5 +1,5 @@
-from src.core.topic_mover import generate_plan, execute_plan, verify_plan
-from src.core.utils import json_2_csv, csv_2_json, write_to_file_csv, read_from_topics_file, clean_reassignment
+from migrator.core.topic_mover import generate_plan, execute_plan, verify_plan
+from migrator.core.utils import json_2_csv, csv_2_json, write_to_file_csv, read_from_topics_file, clean_reassignment
 import optparse
 import editor
 import sys

@@ -1,8 +1,8 @@
 import os
 import json
 import subprocess
-from src.core.topic_extractor import list_topics, topic_filter
-from src.core.utils import create_topics_json, write_to_file, remove_file
+from migrator.core.topic_extractor import list_topics, topic_filter
+from migrator.core.utils import create_topics_json, write_to_file, remove_file
 
 GENERATE_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --generate --topics-to-move-json-file {topics_json} --broker-list {broker_list}"
 EXECUTE_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --execute --reassignment-json-file {plan_json}"
@@ -18,8 +18,6 @@ def generate_plan(**kwargs):
 	brokers = kwargs.get("brokers")
 
 	if all_topics == True or topic_filter_regex:
-		print (all_topics)
-		print (topic_filter)
 		error, topics = list_topics(zookeeper=zookeeper, kafka_path=kafka_path)
 
 		if error:

@@ -28,7 +28,10 @@ setup(name='migrator-1.0-djmgit',
       packages=setuptools.find_packages(),
       install_requires=get_dependencies(),
       entry_points={
-          'console_scripts': ['migrator=src.driver.driver:drive'],
+          'console_scripts': ['migrator=migrator.driver.driver:drive'],
       },
       include_package_data=True,
       zip_safe=False)
+
+if __name__ == "__main__":
+  print (setuptools.find_packages())
