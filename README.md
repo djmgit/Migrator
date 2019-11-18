@@ -26,8 +26,8 @@ and crisp commands.
 
 The machine where where you will install Migrator should have the kafka binaries installed on them.
 By default Migrator looks for kafka binaries under /opt/kafka/bin. If your binaries are located elsewhere, you
-can pass it to Migrator using the --kakfapath option. Dont worry even if you forget to pass the path, Migrator
-will automatically ask for it.
+can pass it to Migrator using the --kakfapath option. However the simplest way would be to keep a copy of the kafka binaries
+under /opt/kafka/bin. The kafka compressed binaries can be downloaded from <a href="https://kafka.apache.org/downloads">here</a>
 
 ### Usage
 
@@ -227,5 +227,8 @@ Reassignment of partition topic-1-1 completed successfully
  - You can provide the topics as a file : ``` migrator -z 127.0.0.1 -k <topics_file> -b 1,2,3,4``` Each line in the topics file shoud be a separate topic.
  - You can generate a plan for all the topics in the cluster using the **-a** option : ``` migrator -z 127.0.0.1 -a -b 1,2,3,4```
  - Optinally you can apply filters. For example you can only reassign those topics which start with the pattern "topic". You can use regex to do this. ``` migrator -z 127.0.0.1 -a -b 1,2,3,4 -f "^topic"```
+ 
+ Please note that, in the above examples it has been assumed that your kafka binaries are present under **/opt/kafka/bin**.
+ 
  
 
