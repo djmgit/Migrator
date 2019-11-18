@@ -25,9 +25,10 @@ and crisp commands.
 - Verify your installation using ```migrator --help```
 
 The machine where where you will install Migrator should have the kafka binaries installed on them.
-By default Migrator looks for kafka binaries under /opt/kafka/bin. If your binaries are located elsewhere, you
-can pass it to Migrator using the --kakfapath option. However the simplest way would be to keep a copy of the kafka binaries
+By default Migrator looks for kafka shell scripts under /opt/kafka/bin. If the scripts are located elsewhere, you
+can pass it to Migrator using the --kakfapath option. However the simplest way would be to keep a copy of the kafka shell scripts
 under /opt/kafka/bin. The kafka compressed binaries can be downloaded from <a href="https://kafka.apache.org/downloads">here</a>
+After decompressing, rename the folder to kafka and put a copy under /opt. By default the scrips are under kafka/bin.
 
 ### Usage
 
@@ -228,7 +229,17 @@ Reassignment of partition topic-1-1 completed successfully
  - You can generate a plan for all the topics in the cluster using the **-a** option : ``` migrator -z 127.0.0.1 -a -b 1,2,3,4```
  - Optinally you can apply filters. For example you can only reassign those topics which start with the pattern "topic". You can use regex to do this. ``` migrator -z 127.0.0.1 -a -b 1,2,3,4 -f "^topic"```
  
- Please note that, in the above examples it has been assumed that your kafka binaries are present under **/opt/kafka/bin**.
+ Please note that, in the above examples it has been assumed that your kafka binaries are present under **/opt/kafka/bin**. If it
+ is not the case then please provide path to your kafka bin folder with --kafkapath option. Simplest option will be to keep
+ a copy of kafka under /opt as already mentioned above.
+ 
+ ### Contributing
+ 
+ The main motivation of the tool is to simplify the process of topic partition reassignment in kafka as the original commands
+ provided by kafka are somewhat crude.
+ If you think you can simplify/improve the process further, then please send a pull request. I will be more than happy
+ to review and merge it.
+ Please make sure that you create an issue for every pull request.
  
  
 
