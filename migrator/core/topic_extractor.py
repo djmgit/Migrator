@@ -6,6 +6,16 @@ LIST_TOPIC = "kafka-topics.sh --zookeeper {zookeeper} --list"
 
 def list_topics(zookeeper="127.0.0.1", kafka_path="/opt/kafka/bin"):
 
+	"""
+		**Method to fetch and list topics from kafka**
+
+		Args:
+			zokeeper (string): addresss where zookeeper is running
+
+		Returns:
+			string, list: error if any, list of topics
+	"""
+
 	list_topic_command = LIST_TOPIC.format(zookeeper=zookeeper)
 	list_topic_command = os.path.join(kafka_path, list_topic_command)
 
@@ -21,6 +31,15 @@ def list_topics(zookeeper="127.0.0.1", kafka_path="/opt/kafka/bin"):
 	return None, output_list
 
 def topic_filter(topic_list, regex=".*"):
+
+	"""
+		Args:
+			topic_list (list): List of topics
+			regex (string): pattern to filter out topics
+
+		Returns:
+			list: List of filtered topics
+	"""
 	
 	filtered_topics = []
 	pattern = re.compile(regex)
