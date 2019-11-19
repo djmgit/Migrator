@@ -229,7 +229,7 @@ Reassignment of partition topic-1-1 completed successfully
  - You can generate a plan for all the topics in the cluster using the **-a** option : ``` migrator -z 127.0.0.1 -a -b 1,2,3,4```
  - Optinally you can apply filters. For example you can only reassign those topics which start with the pattern "topic". You can use regex to do this. ``` migrator -z 127.0.0.1 -a -b 1,2,3,4 -f "^topic"```
  
- Please note that, in the above examples it has been assumed that your kafka binaries are present under **/opt/kafka/bin**. If it
+ Please note that, in the above examples it has been assumed that your kafka bin is present at **/opt/kafka/bin**. If it
  is not the case then please provide path to your kafka bin folder with --kafkapath option. Simplest option will be to keep
  a copy of kafka under /opt as already mentioned above.
  
