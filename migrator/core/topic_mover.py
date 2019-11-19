@@ -10,6 +10,16 @@ VERIFY_PLAN = "kafka-reassign-partitions.sh --zookeeper {zookeeper} --verify --r
 
 def generate_plan(**kwargs):
 
+	"""
+		**Method for generating reassignment plan**
+
+		Args:
+			kwargs (dict): dict containing various parameters required.
+
+		Returns:
+			string, string: error if any, Path to file containing generated plan in json format.
+	"""
+
 	zookeeper = kwargs.get("zookeeper")
 	all_topics = kwargs.get("all_topics")
 	topics = kwargs.get("topics")
@@ -17,21 +27,25 @@ def generate_plan(**kwargs):
 	topic_filter_regex = kwargs.get("topic_filter")
 	brokers = kwargs.get("brokers")
 
+	# if all_topics is true, fetch all the topics in the cluster
 	if all_topics == True or topic_filter_regex:
 		error, topics = list_topics(zookeeper=zookeeper, kafka_path=kafka_path)
 
 		if error:
 			return error, None
 
+	# if there exists a filter pattern, then filter out topics
 	if topic_filter_regex:
 		topics = topic_filter(topics, regex=topic_filter_regex)
 
+	# create a file containing topics is desired json format
 	topics_json = create_topics_json(topics)
 	topic_json_file = write_to_file(json_type="topics", json_data=topics_json)
 
 	plan_generation_command = GENERATE_PLAN.format(zookeeper=zookeeper, topics_json=topic_json_file, broker_list=",".join(brokers))
 	plan_generation_command = os.path.join(kafka_path, plan_generation_command)
 
+	# generate the plan
 	proc = subprocess.Popen(plan_generation_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 	output, error = proc.communicate()
 	proc_exit_code = proc.returncode
@@ -42,11 +56,22 @@ def generate_plan(**kwargs):
 	output_list = output.split("\n")
 	plan_json = json.loads(output_list[4])
 
+	# remove the topics json file as it is no more required.
 	remove_file(topic_json_file)
 
 	return None, plan_json
 
 def execute_plan(**kwargs):
+
+	"""
+		**Method to execute generated plan**
+
+		Args:
+			kwargs (dict): dict containing various params required for plan execution
+
+		Returns:
+			string, string: error if any, Path to file containing generated plan in json format.
+	"""
 	zookeeper = kwargs.get("zookeeper")
 	plan_json = kwargs.get("plan_json")
 	kafka_path = kwargs.get("kafka_path")
@@ -66,6 +91,16 @@ def execute_plan(**kwargs):
 	return None, plan_json_file
 
 def verify_plan(**kwargs):
+
+	"""
+		**Method to verify plan execution**
+
+		Args:
+			kwargs (dict): dict containing various params required for plan execution
+
+		Returns:
+			string, string: error if any, output of verification
+	"""
 	zookeeper = kwargs.get("zookeeper")
 	plan_json_file = kwargs.get("plan_json_file")
 	kafka_path = kwargs.get("kafka_path")
