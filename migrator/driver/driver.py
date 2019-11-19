@@ -207,7 +207,7 @@ def setup_optparse():
 	parser.add_option('-p', '--kafkapath', dest='kafkapath', default="/opt/kafka/bin", help="Provide path to kafka binaries")
 	parser.add_option('-a', '--all', dest="all", action="store_true", default=False, help="Select all the topics for moving")
 	parser.add_option('-f', '--filter', dest="filter", help="Regex to filter topic names")
-	parser.add_option('-t', '--topics', dest='topics', help="Comma separated topics")
+	parser.add_option('-t', '--topcvsics', dest='topics', help="Comma separated topics")
 	parser.add_option('-k', '--topics-file', dest="topics_file", help="File containing list of topics to move")
 	parser.add_option('-z', '--zookeeper', dest='zookeeper', help="Provide zookeeper host/ip. If port used is different from 2181, then provide host:port")
 	parser.add_option('-b', '--brokers', dest="brokers", help="Provide broker ids separated by comma")

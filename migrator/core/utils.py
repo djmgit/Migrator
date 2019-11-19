@@ -4,6 +4,16 @@ from datetime import datetime
 
 def create_topics_json(topic_list):
 
+    """
+        **Method for creating topics json file**
+
+        Args:
+            topic_list (string): list of topics
+
+        Returns:
+            dict: dict containing topics in the format required by kafka
+    """
+
     topics_json = {}
     topics_json["version"] = 1
     topics_json["topics"] = []
@@ -17,6 +27,16 @@ def create_topics_json(topic_list):
 
 def write_to_file(json_type="topics", json_data=None):
 
+    """
+        **Method to write given contents to a file**
+
+        Args:
+            json_type (string): topics or plan, just to name the file appropriately
+
+        Returns:
+            string: Name of the file created
+    """
+
     unix_time_stamp = datetime.now().strftime("%s")
 
     file_name = os.path.expanduser("~/.{json_type}.json").format(json_type=json_type)
@@ -28,6 +48,16 @@ def write_to_file(json_type="topics", json_data=None):
 
 def write_to_file_csv(csv_data):
 
+    """
+        **Method to write csv data to file**
+
+        Args:
+            string: csv data
+        
+        Returns:
+            None: Returns nothing
+    """
+
     unix_time_stamp = datetime.now().strftime("%s")
 
     file_name = os.path.expanduser("~/.plan.csv")
@@ -37,6 +67,16 @@ def write_to_file_csv(csv_data):
 
 
 def json_2_csv(json_data):
+    
+    """
+        **Metthod for converting plan in json to csv format for table**
+
+        Args:
+            json_data (string): plan in json
+
+        Returns:
+            string: cvs data
+    """
     partition_data = json_data.get("partitions")
 
     headers = ["Topic", "Partition", "Replicas", "Log Dirs"]
@@ -60,6 +100,17 @@ def json_2_csv(json_data):
     return csv_data
 
 def csv_2_json(csv_data):
+
+
+    """
+        **Metthod for converting plan in csv to json format for execution**
+
+        Args:
+            json_data (string): plan in csv
+
+        Returns:
+            string: json data
+    """
 
     csv_list = csv_data.split("\n")
     csv_list = csv_list[1:len(csv_list)]
